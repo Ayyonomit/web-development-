@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="A practical guide to SEO and web accessibility by Nomit Bhadoriya.">
+  <meta name="keywords"
+        content="HTML, SEO, Accessibility, Web Development">
+  <meta name="author"
+        content="Nomit Bhadoriya">
+
+  <title>SEO & Accessibility - Experiment 4</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #222;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 25px 15px;
+      background-color: #ffffff;
+    }
+
+    header {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #2b6cb0;
+      font-weight: bold;
+    }
+
+    a:focus,
+    button:focus,
+    input:focus {
+      outline: 2px solid #2b6cb0;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin: 15px 0;
+    }
+
+    form {
+      background: #f7f9fa;
+      border: 1px solid #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      max-width: 400px;
+      margin-top: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+    }
+
+    button {
+      background: #3182ce;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    footer {
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav aria-label="Main Navigation">
+      <ul>
+        <li><a href="#about">Basics</a></li>
+        <li><a href="#headings">Headings</a></li>
+        <li><a href="#form">Accessible Form</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <article>
+
+      <h1>Webpage SEO and Accessibility Optimization</h1>
+
+      <p>
+        Practical by <strong>Nomit Bhadoriya</strong>,
+        2nd Year CSE (Data Science), JSS University.
+      </p>
+
+      <section id="about">
+
+        <h2>1. Semantic HTML Structure</h2>
+
+        <p>
+          Semantic HTML elements such as header, nav, main, article,
+          section, and footer help search engines and screen readers
+          understand the structure and content of a webpage.
+        </p>
+
+        <img
+          src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=700&auto=format&fit=crop&q=80"
+          alt="Computer screen displaying web development code">
+
+      </section>
+
+      <section id="headings">
+
+        <h2>2. Proper Heading Hierarchy</h2>
+
+        <p>
+          A webpage should have a clear heading structure. The main
+          topic is represented by an h1 heading, while subtopics use
+          h2 and h3 headings in a logical order.
+        </p>
+
+      </section>
+
+      <section id="form">
+
+        <h2>3. Accessible Form</h2>
+
+        <p>
+          Accessible forms should provide clear labels for every input.
+          The label and input are connected using the for and id
+          attributes, making the form easier to use with assistive
+          technologies.
+        </p>
+
+        <form onsubmit="event.preventDefault(); alert('Subscribed!');">
+
+          <label for="student-email">Email Address</label>
+
+          <input
+            type="email"
+            id="student-email"
+            placeholder="student@jssaten.ac.in"
+            required>
+
+          <button type="submit">Subscribe</button>
+
+        </form>
+
+      </section>
+
+    </article>
+
+  </main>
+
+  <footer>
+    <p>
+      &copy; 2026 Nomit Bhadoriya | JSS University Web Lab
+    </p>
+  </footer>
+
+</body>
+</html>
