@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Weather</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--a:#2b6cb0;--b:#63b3ed}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#fff;min-height:100vh;padding:16px;
+ background:linear-gradient(160deg,var(--a),var(--b)) fixed;transition:background .6s}
+.wrap{max-width:900px;margin:auto;display:grid;gap:14px}
+.card{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:18px;backdrop-filter:blur(12px)}
+form{display:flex;gap:8px;flex-wrap:wrap;position:relative}
+input{flex:1;min-width:160px;padding:13px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.18);color:#fff;font-size:1rem;outline:none}
+input::placeholder{color:rgba(255,255,255,.75)}
+button{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.18);color:#fff;font-size:1rem;cursor:pointer}
+#list{position:absolute;top:54px;left:0;right:0;z-index:1000;background:#16304f;border-radius:12px;overflow:hidden;display:none}
+#list div{padding:12px 16px;cursor:pointer}#list div:hover{background:#25497a}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.temp{font-size:5rem;font-weight:800;line-height:1}
+.icon{font-size:4rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}
+.grid div{background:rgba(255,255,255,.14);padding:10px;border-radius:12px}
+.grid b{display:block;font-size:1.1rem}.grid small{opacity:.8}
+#map{height:340px;border-radius:14px}
+.row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.row div{flex:0 0 78px;text-align:center;background:rgba(255,255,255,.14);padding:10px 4px;border-radius:12px}
+.days div{display:flex;justify-content:space-between;padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.2)}
+#msg{text-align:center;font-size:.9rem;opacity:.9}
+h2{font-size:1rem;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <form id="form" autocomplete="off">
+    <input id="q" placeholder="Search city (e.g. Delhi, London)">
+    <button type="button" id="gps">My location</button>
+    <button type="button" id="unit">°C</button>
+    <div id="list"></div>
+  </form>
+  <div id="msg">Loading…</div>
+
+  <div class="card">
+    <div class="top">
+      <div><div id="place" style="font-size:1.2rem;font-weight:600"></div><div id="cond"></div><div id="feels"></div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span class="icon" id="icon"></span><span class="temp" id="temp">--</span></div>
+    </div>
+    <div class="grid">
+      <div><b id="hum">--</b><small>Humidity</small></div>
+      <div><b id="wind">--</b><small>Wind</small></div>
+      <div><b id="rain">--</b><small>Rain now</small></div>
+      <div><b id="rise">--</b><small>Sunrise</small></div>
+      <div><b id="set">--</b><small>Sunset</small></div>
+    </div>
+  </div>
+
+  <div class="card"><div id="map"></div><small style="opacity:.8;display:block;margin-top:8px">Tap the map to see weather for any spot.</small></div>
+  <div class="card"><h2>Next 24 hours</h2><div class="row" id="hours"></div></div>
+  <div class="card"><h2>7-day forecast</h2><div class="days" id="days"></div></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const S = { lat: 28.6139, lon: 77.209, name: 'Delhi, India', f: false, d: null };
+
+// weather code -> [codes, text, day icon, night icon, day colours, night colours]
+const CODES = [
+  [[0],'Clear','☀️','🌙',['#1e73be','#7cc4fa'],['#0b1a3a','#27406f']],
+  [[1,2],'Partly cloudy','⛅','☁️',['#3b78b5','#95c3e6'],['#14223f','#34476b']],
+  [[3],'Overcast','☁️','☁️',['#5b6b7c','#9aa8b6'],['#242c38','#47515f']],
+  [[45,48],'Fog','🌫️','🌫️',['#6c7a86','#b4bec6'],['#2a3139','#505a63']],
+  [[51,53,55,56,57],'Drizzle','🌦️','🌧️',['#4a6785','#8aa6c0'],['#1c2736','#3d526b']],
+  [[61,63,65,66,67,80,81,82],'Rain','🌧️','🌧️',['#3c5a7a','#7494b3'],['#151f2e','#33465e']],
+  [[71,73,75,77,85,86],'Snow','🌨️','🌨️',['#7f9bb8','#d4e3f1'],['#2a3a50','#5d7390']],
+  [[95,96,99],'Thunderstorm','⛈️','⛈️',['#35305a','#6a5f9c'],['#12102a','#2f2a55']]
+];
+const W = c => CODES.find(x => x[0].includes(c)) || CODES[2];
+const T = c => Math.round(S.f ? c * 9 / 5 + 32 : c) + '°';
+const hhmm = iso => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+async function getJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('Server returned ' + r.status);
+  return r.json();
+}
+
+// ---- map ----
+const map = L.map('map').setView([S.lat, S.lon], 8);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', maxZoom: 18 }).addTo(map);
+const pin = L.marker([S.lat, S.lon]).addTo(map);
+map.on('click', e => go(e.latlng.lat, e.latlng.lng, `Selected spot (${e.latlng.lat.toFixed(2)}, ${e.latlng.lng.toFixed(2)})`));
+
+// ---- weather ----
+function go(lat, lon, name) {
+  Object.assign(S, { lat, lon, name });
+  pin.setLatLng([lat, lon]);
+  map.setView([lat, lon], Math.max(map.getZoom(), 8));
+  load();
+}
+
+async function load() {
+  $('msg').textContent = 'Updating…';
+  const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + S.lat + '&longitude=' + S.lon +
+    '&timezone=auto&forecast_days=7' +
+    '&current=temperature_2m,apparent_temperature,relative_humidity_2m,is_day,precipitation,weather_code,wind_speed_10m' +
+    '&hourly=temperature_2m,weather_code,is_day' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset';
+  try {
+    S.d = await getJSON(url);
+    show();
+    $('msg').textContent = 'Live · updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ' · refreshes every 10 min';
+  } catch (e) {
+    $('msg').textContent = 'Could not load weather (' + e.message + '). Open this file in a normal browser tab with internet access.';
+  }
+}
+
+function show() {
+  const d = S.d, c = d.current, w = W(c.weather_code), day = c.is_day === 1;
+  const col = day ? w[4] : w[5];
+  document.documentElement.style.setProperty('--a', col[0]);
+  document.documentElement.style.setProperty('--b', col[1]);
+
+  $('place').textContent = S.name;
+  $('cond').textContent = w[1];
+  $('feels').textContent = 'Feels like ' + T(c.apparent_temperature);
+  $('icon').textContent = day ? w[2] : w[3];
+  $('temp').textContent = T(c.temperature_2m);
+  $('hum').textContent = c.relative_humidity_2m + '%';
+  $('wind').textContent = (S.f ? Math.round(c.wind_speed_10m * .621) + ' mph' : Math.round(c.wind_speed_10m) + ' km/h');
+  $('rain').textContent = c.precipitation + ' mm';
+  $('rise').textContent = hhmm(d.daily.sunrise[0]);
+  $('set').textContent = hhmm(d.daily.sunset[0]);
+
+  const h = d.hourly, i0 = Math.max(0, h.time.findIndex(t => t >= c.time.slice(0, 13)));
+  $('hours').innerHTML = h.time.slice(i0, i0 + 24).map((t, i) => {
+    const k = i0 + i, x = W(h.weather_code[k]);
+    return `<div><small>${i ? new Date(t).toLocaleTimeString([], { hour: 'numeric' }) : 'Now'}</small><div style="font-size:1.6rem">${h.is_day[k] ? x[2] : x[3]}</div><b>${T(h.temperature_2m[k])}</b></div>`;
+  }).join('');
+
+  $('days').innerHTML = d.daily.time.map((t, i) =>
+    `<div><span>${i ? new Date(t + 'T12:00').toLocaleDateString([], { weekday: 'long' }) : 'Today'}</span><span>${W(d.daily.weather_code[i])[2]}</span><span>${T(d.daily.temperature_2m_min[i])} / <b>${T(d.daily.temperature_2m_max[i])}</b></span></div>`
+  ).join('');
+}
+
+// ---- search ----
+let timer;
+$('q').addEventListener('input', e => {
+  clearTimeout(timer);
+  const v = e.target.value.trim();
+  if (v.length < 2) { $('list').style.display = 'none'; return; }
+  timer = setTimeout(async () => {
+    try {
+      const r = (await getJSON('https://geocoding-api.open-meteo.com/v1/search?count=5&name=' + encodeURIComponent(v))).results || [];
+      $('list').innerHTML = r.map((x, i) => `<div data-i="${i}">${x.name}, ${x.admin1 ? x.admin1 + ', ' : ''}${x.country || ''}</div>`).join('') || '<div>No match</div>';
+      $('list').style.display = 'block';
+      $('list').onclick = ev => {
+        const row = ev.target.closest('[data-i]'); if (!row) return;
+        const x = r[row.dataset.i];
+        $('q').value = ''; $('list').style.display = 'none';
+        go(x.latitude, x.longitude, x.name + (x.country ? ', ' + x.country : ''));
+      };
+    } catch (err) { $('msg').textContent = 'Search failed (' + err.message + ')'; }
+  }, 300);
+});
+$('form').addEventListener('submit', e => { e.preventDefault(); const f = $('list').querySelector('[data-i]'); if (f) f.click(); });
+
+$('unit').onclick = () => { S.f = !S.f; $('unit').textContent = S.f ? '°F' : '°C'; if (S.d) show(); };
+
+$('gps').onclick = () => {
+  if (!navigator.geolocation) { $('msg').textContent = 'Location is not supported here. Use search instead.'; return; }
+  navigator.geolocation.getCurrentPosition(
+    p => go(p.coords.latitude, p.coords.longitude, 'Your location'),
+    () => { $('msg').textContent = 'Location blocked. Allow it in the browser, or search for a city.'; }
+  );
+};
+
+load();
+setInterval(load, 600000);
+</script>
+</body>
+</html>
