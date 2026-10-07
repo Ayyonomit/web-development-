@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================
+  Experiment 6: Responsive Blog Website using Bootstrap 5 & Media Queries
+  Name       : Nomit Bhadoriya
+  Course     : 2nd Year CSE (Data Science)
+  University : JSS University
+  Subject    : Web Development Lab
+  ==========================================================
+-->
+<html lang="en">
+<head>
+  <!-- Basic page setup -->
+  <meta charset="UTF-8">
+
+  <!-- VIEWPORT META TAG: makes the page scale properly on mobile screens.
+       Without this tag, media queries will not work correctly on phones. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nomit's Blog | Responsive Blog Website</title>
+
+  <!-- Bootstrap 5 CSS loaded from CDN (Content Delivery Network) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- =====================================================
+       CUSTOM CSS
+       Our own styles are written AFTER Bootstrap so that
+       they can override Bootstrap's default styles.
+       ===================================================== -->
+  <style>
+    /* ---------- 1. CSS VARIABLES (colors in one place) ---------- */
+    :root {
+      --primary-color: #1f3a5f;   /* deep blue  - navbar, headings */
+      --accent-color:  #e07a1f;   /* orange     - buttons, highlights */
+      --light-bg:      #f4f6f9;   /* light grey - page background */
+      --text-color:    #333333;   /* dark grey  - body text */
+    }
+
+    /* ---------- 2. TYPOGRAPHY ---------- */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.7;                 /* comfortable line spacing */
+    }
+
+    h1, h2, h3, h4, h5 {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    /* ---------- 3. NAVBAR STYLING ---------- */
+    .custom-navbar {
+      background-color: var(--primary-color);
+    }
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .navbar .nav-link {
+      color: #ffffff;
+      margin-left: 0.5rem;
+      transition: color 0.3s ease;      /* smooth color change on hover */
+    }
+    .navbar .nav-link:hover,
+    .navbar .nav-link.active {
+      color: var(--accent-color);
+    }
+
+    /* ---------- 4. HERO SECTION ---------- */
+    .hero {
+      /* Gradient background: blue -> lighter blue */
+      background: linear-gradient(135deg, #1f3a5f 0%, #3b6ea5 100%);
+      color: #ffffff;
+      padding: 6rem 0;                  /* space above and below text */
+      text-align: center;
+    }
+    .hero h1 {
+      color: #ffffff;
+      font-size: 3rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 650px;
+      margin: 1rem auto 2rem auto;      /* centers the paragraph */
+    }
+
+    /* Custom orange button */
+    .btn-accent {
+      background-color: var(--accent-color);
+      border: none;
+      color: #ffffff;
+      padding: 0.7rem 2rem;
+      border-radius: 50px;              /* rounded pill shape */
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    .btn-accent:hover {
+      background-color: #c4650f;
+      color: #ffffff;
+      transform: scale(1.05);           /* button grows slightly on hover */
+    }
+
+    /* ---------- 5. SECTION HEADINGS ---------- */
+    .section-title {
+      margin-bottom: 2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--accent-color);
+      display: inline-block;
+    }
+
+    /* ---------- 6. BLOG CARD STYLING ---------- */
+    .blog-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;                 /* keeps image corners rounded */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* HOVER EFFECT: card lifts up and shadow becomes deeper */
+    .blog-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+    }
+    .blog-card img {
+      height: 200px;
+      object-fit: cover;                /* crops image neatly, no stretching */
+    }
+    .category-badge {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .blog-card .card-title {
+      font-size: 1.15rem;
+    }
+    .btn-readmore {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    .btn-readmore:hover {
+      background-color: var(--accent-color);
+      color: #ffffff;
+    }
+
+    /* ---------- 7. SIDEBAR STYLING ---------- */
+    .sidebar-box {
+      background-color: #ffffff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-box h4 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .sidebar-box a {
+      color: var(--text-color);
+      text-decoration: none;
+      transition: color 0.3s ease, padding-left 0.3s ease;
+    }
+    .sidebar-box a:hover {
+      color: var(--accent-color);
+      padding-left: 6px;                /* link slides slightly right on hover */
+    }
+    .sidebar-box .list-group-item {
+      border: none;
+      border-bottom: 1px solid #eeeeee;
+      padding: 0.6rem 0;
+    }
+
+    /* ---------- 8. FOOTER ---------- */
+    .custom-footer {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      padding: 1.5rem 0;
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    /* ==========================================================
+       9. CSS MEDIA QUERIES  (RESPONSIVE DESIGN)
+       A media query applies CSS only when the screen size
+       matches the given condition.
+       Breakpoints used:
+         Mobile  : up to 576px
+         Tablet  : 577px to 991px
+         Desktop : 992px and above
+       ========================================================== */
+
+    /* ----- MOBILE (phones): screen width 576px or less ----- */
+    @media (max-width: 576px) {
+      .hero {
+        padding: 3.5rem 0;              /* less space on small screens */
+      }
+      .hero h1 {
+        font-size: 1.8rem;              /* smaller heading */
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .blog-card img {
+        height: 170px;
+      }
+      .section-title {
+        font-size: 1.4rem;
+      }
+      body {
+        background-color: #eef1f6;      /* slightly different color on mobile */
+      }
+    }
+
+    /* ----- TABLET: screen width between 577px and 991px ----- */
+    @media (min-width: 577px) and (max-width: 991px) {
+      .hero {
+        padding: 4.5rem 0;
+      }
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .blog-card img {
+        height: 180px;
+      }
+    }
+
+    /* ----- DESKTOP (laptops/monitors): screen width 992px or more ----- */
+    @media (min-width: 992px) {
+      .hero h1 {
+        font-size: 3.5rem;              /* biggest heading on large screens */
+      }
+      .blog-card img {
+        height: 210px;
+      }
+      /* Sidebar stays visible while scrolling (sticky) on desktop only */
+      .sidebar-sticky {
+        position: sticky;
+        top: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================================
+       NAVBAR
+       - navbar            : base Bootstrap navbar class
+       - navbar-expand-lg  : navbar is expanded on large screens (>=992px)
+                             and collapses into a hamburger menu on smaller ones
+       - navbar-dark       : makes text/toggler light colored for dark background
+       ========================================================= -->
+  <nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
+    <div class="container">
+      <!-- Website name / brand -->
+      <a class="navbar-brand" href="#home">Nomit's Blog</a>
+
+      <!-- Hamburger button (visible only on small screens) -->
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse" data-bs-target="#navMenu"
+              aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Collapsible navigation links -->
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">  <!-- ms-auto pushes links to the right -->
+          <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#technology">Technology</a></li>
+          <li class="nav-item"><a class="nav-link" href="#lifestyle">Lifestyle</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- =========================================================
+       HERO SECTION
+       The big welcome banner at the top of the page.
+       ========================================================= -->
+  <header class="hero" id="home">
+    <div class="container">
+      <h1>Welcome to Nomit's Blog</h1>
+      <p>
+        I'm a CSE (Data Science) student sharing what I learn about technology,
+        coding, and everyday student life. Explore the latest posts below.
+      </p>
+      <a href="#technology" class="btn btn-accent btn-lg">Start Reading</a>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       MAIN CONTENT
+       Uses Bootstrap's 12-column grid:
+         - Blog posts take  8 columns (col-lg-8)
+         - Sidebar takes    4 columns (col-lg-4)
+       On screens smaller than "lg" (992px), both stack vertically.
+       ========================================================= -->
+  <main class="container my-5">
+    <div class="row">
+
+      <!-- ================= LEFT: BLOG POSTS ================= -->
+      <div class="col-lg-8">
+
+        <h2 class="section-title" id="technology">Latest Blog Posts</h2>
+
+        <!-- Inner row for the cards.
+             col-12        : 1 card per row on mobile
+             col-md-6      : 2 cards per row on tablets and above
+             g-4           : gap between cards -->
+        <div class="row g-4">
+
+          <!-- ---------- BLOG CARD 1 ---------- -->
+          <div class="col-12 col-md-6">
+            <div class="card blog-card h-100">
+              <img src="https://picsum.photos/seed/tech-ai/600/400" class="card-img-top" alt="Artificial intelligence concept">
+              <div class="card-body d-flex flex-column">
+                <span class="category-badge align-self-start">Technology</span>
+                <h5 class="card-title">Getting Started with Artificial Intelligence</h5>
+                <p class="card-text">A beginner-friendly look at what AI is and how students can start learning it.</p>
+                <a href="#" class="btn btn-readmore mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---------- BLOG CARD 2 ---------- -->
+          <div class="col-12 col-md-6">
+            <div class="card blog-card h-100">
+              <img src="https://picsum.photos/seed/tech-code/600/400" class="card-img-top" alt="Laptop with code on screen">
+              <div class="card-body d-flex flex-column">
+                <span class="category-badge align-self-start">Technology</span>
+                <h5 class="card-title">Why Every Student Should Learn Python</h5>
+                <p class="card-text">Python is simple, powerful, and the first step into data science.</p>
+                <a href="#" class="btn btn-readmore mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---------- BLOG CARD 3 ---------- -->
+          <div class="col-12 col-md-6">
+            <div class="card blog-card h-100">
+              <img src="https://picsum.photos/seed/tech-web/600/400" class="card-img-top" alt="Web design on a computer">
+              <div class="card-body d-flex flex-column">
+                <span class="category-badge align-self-start">Technology</span>
+                <h5 class="card-title">Building Responsive Websites with Bootstrap</h5>
+                <p class="card-text">How the grid system and media queries make one page fit every screen.</p>
+                <a href="#" class="btn btn-readmore mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Anchor for the Lifestyle navbar link -->
+          <div class="col-12" id="lifestyle"></div>
+
+          <!-- ---------- BLOG CARD 4 ---------- -->
+          <div class="col-12 col-md-6">
+            <div class="card blog-card h-100">
+              <img src="https://picsum.photos/seed/life-study/600/400" class="card-img-top" alt="Student studying with books">
+              <div class="card-body d-flex flex-column">
+                <span class="category-badge align-self-start">Lifestyle</span>
+                <h5 class="card-title">5 Study Habits That Actually Work</h5>
+                <p class="card-text">Simple routines that help me stay focused during exams and lab work.</p>
+                <a href="#" class="btn btn-readmore mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---------- BLOG CARD 5 ---------- -->
+          <div class="col-12 col-md-6">
+            <div class="card blog-card h-100">
+              <img src="https://picsum.photos/seed/life-campus/600/400" class="card-img-top" alt="College campus life">
+              <div class="card-body d-flex flex-column">
+                <span class="category-badge align-self-start">Lifestyle</span>
+                <h5 class="card-title">Balancing College Life and Personal Growth</h5>
+                <p class="card-text">Tips on managing classes, hobbies, and free time without burning out.</p>
+                <a href="#" class="btn btn-readmore mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---------- BLOG CARD 6 ---------- -->
+          <div class="col-12 col-md-6">
+            <div class="card blog-card h-100">
+              <img src="https://picsum.photos/seed/life-travel/600/400" class="card-img-top" alt="Travel and nature">
+              <div class="card-body d-flex flex-column">
+                <span class="category-badge align-self-start">Lifestyle</span>
+                <h5 class="card-title">Small Weekend Trips to Refresh Your Mind</h5>
+                <p class="card-text">Why short breaks from screens make you more creative and productive.</p>
+                <a href="#" class="btn btn-readmore mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- end inner row -->
+      </div> <!-- end left column -->
+
+      <!-- ================= RIGHT: SIDEBAR =================
+           d-none d-lg-block : HIDDEN on small screens, VISIBLE on large
+           screens (>=992px). -->
+      <aside class="col-lg-4 d-none d-lg-block">
+        <div class="sidebar-sticky">
+
+          <!-- Popular Posts box -->
+          <div class="sidebar-box">
+            <h4>Popular Posts</h4>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><a href="#">Getting Started with Artificial Intelligence</a></li>
+              <li class="list-group-item"><a href="#">Why Every Student Should Learn Python</a></li>
+              <li class="list-group-item"><a href="#">5 Study Habits That Actually Work</a></li>
+              <li class="list-group-item"><a href="#">Building Responsive Websites with Bootstrap</a></li>
+            </ul>
+          </div>
+
+          <!-- Categories box -->
+          <div class="sidebar-box">
+            <h4>Categories</h4>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <a href="#technology">Technology</a>
+                <span class="badge bg-secondary rounded-pill">3</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <a href="#lifestyle">Lifestyle</a>
+                <span class="badge bg-secondary rounded-pill">3</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </aside>
+
+    </div> <!-- end main row -->
+  </main>
+
+  <!-- =========================================================
+       CONTACT SECTION
+       Gives the "Contact" navbar link a target.
+       ========================================================= -->
+  <section class="container text-center my-5" id="contact">
+    <h2 class="section-title">Contact</h2>
+    <p>Have a question or want to collaborate? Write to me at
+       <strong>nomit@example.com</strong></p>
+  </section>
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+  <footer class="custom-footer">
+    <div class="container">
+      <p class="mb-0">&copy; 2026 Nomit Bhadoriya | JSS University Web Development Lab</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS bundle (needed for the navbar hamburger toggle to work) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
