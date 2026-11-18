@@ -1,178 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nomitdzns Thumbnail Design Service</title>
-  <meta name="description" content="Thumbnail designer. YouTube thumbnails crafted to maximize clicks.">
-
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://framerusercontent.com; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="robots" content="index, follow, max-image-preview:large">
-
-  <meta property="og:title" content="Nomitdzns Thumbnail Design Service">
-  <meta property="og:description" content="Thumbnail designer">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://framerusercontent.com/images/UrlWfhuukQTEst8YRO8aEmA0.png">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nomit — Creative Director / Designer</title>
+<meta name="description" content="Nomit — Creative Director, Designer, Founder of HVTO Studios. Graphic design, art direction, video, fashion and web.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--bg:#f2f0ea;--ink:#111;--muted:#777;--line:#c9c7c0;--acid:#d8ff3e;--pink:#ff6fcf;--blue:#6d7cff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Space Grotesk",sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}.mono{font-family:"DM Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.cursor{position:fixed;z-index:99;width:18px;height:18px;border:1px solid #111;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);mix-blend-mode:difference;background:white;transition:width .2s,height .2s}
+header{position:fixed;z-index:50;top:0;left:0;width:100%;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference;color:white}
+nav{display:flex;gap:24px}.navlink{font-size:13px}.navlink:hover{text-decoration:underline}
+.hero{min-height:100vh;padding:120px 24px 30px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.hero-top{display:flex;justify-content:space-between;gap:30px}.hero-intro{max-width:310px;line-height:1.4}
+.hero h1{font-size:clamp(74px,15vw,210px);line-height:.78;letter-spacing:-.09em;margin:0;font-weight:600;position:relative}
+.hero h1 span{display:block}.hero h1 .outline{-webkit-text-stroke:2px var(--ink);color:transparent}
+.hero-meta{display:flex;justify-content:space-between;align-items:end}.scroll{animation:bob 1.4s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(8px)}}
+.marquee{overflow:hidden;border-block:1px solid var(--ink);padding:13px 0;white-space:nowrap;background:var(--acid)}
+.marquee-track{display:inline-block;animation:marquee 18s linear infinite;font-size:18px;font-weight:600}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.section{padding:110px 24px}.section-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:38px}
+.statement{font-size:clamp(42px,7vw,96px);line-height:.95;letter-spacing:-.06em;max-width:1100px}
+.statement em{font-style:normal;color:var(--pink)}
+.work-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.card{position:relative;overflow:hidden;min-height:420px;background:#ddd;cursor:pointer}
+.card:nth-child(1){grid-column:span 7}.card:nth-child(2){grid-column:span 5}.card:nth-child(3){grid-column:span 5}.card:nth-child(4){grid-column:span 7}.card:nth-child(5){grid-column:span 4}.card:nth-child(6){grid-column:span 8}
+.visual{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.card:hover .visual{transform:scale(1.06) rotate(-1deg)}
+.v1{background:linear-gradient(135deg,#171717 0 45%,#ff6fcf 45% 70%,#d8ff3e 70%);font-size:10vw;font-weight:700;color:white;letter-spacing:-.1em}
+.v2{background:linear-gradient(140deg,#cbd5ff,#6d7cff);font-size:13vw;font-weight:700}
+.v3{background:radial-gradient(circle at 30% 30%,#d8ff3e,#111 52%);font-size:7vw;color:white;font-weight:700}
+.v4{background:linear-gradient(135deg,#eee,#ff8ad8 50%,#111 50%);font-size:8vw;font-weight:700}
+.v5{background:linear-gradient(135deg,#111,#555);color:white;font-size:8vw;font-weight:700}
+.v6{background:linear-gradient(135deg,#6d7cff,#d8ff3e);font-size:7vw;font-weight:700}
+.card-label{position:absolute;left:14px;right:14px;bottom:14px;display:flex;justify-content:space-between;z-index:2;color:white;text-shadow:0 1px 8px #000}
+.about{display:grid;grid-template-columns:1fr 2fr;gap:40px}.about-copy{font-size:clamp(30px,4vw,58px);line-height:1;letter-spacing:-.04em}
+.about-copy b{background:var(--acid);font-weight:500}
+.services{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--ink)}
+.service{padding:22px 0;border-bottom:1px solid var(--ink);display:flex;justify-content:space-between;font-size:20px}.service:nth-child(odd){padding-right:30px}.service:hover{padding-left:12px;transition:.25s}
+.hvto{background:#111;color:#f2f0ea}.hvto .section-head{border-color:#555}.hvto-mark{font-size:clamp(90px,20vw,260px);letter-spacing:-.11em;line-height:.72;color:var(--acid);margin:50px 0}
+.contact{min-height:80vh;display:flex;flex-direction:column;justify-content:space-between}.contact h2{font-size:clamp(70px,14vw,190px);letter-spacing:-.09em;line-height:.78;margin:0}.contact h2 span{color:var(--pink)}
+.footer{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:16px 24px}
+.float-note{position:absolute;right:8%;top:38%;width:130px;height:130px;border-radius:50%;background:var(--acid);display:grid;place-items:center;text-align:center;font-weight:600;transform:rotate(9deg);animation:spin 12s linear infinite}
+@keyframes spin{50%{transform:rotate(-9deg) scale(1.05)}100%{transform:rotate(9deg)}}
+.reveal{opacity:0;transform:translateY(35px);transition:opacity .8s,transform .8s}.reveal.show{opacity:1;transform:none}
+@media(max-width:760px){
+header{padding:14px 16px}.navlink:nth-child(2){display:none}.hero{padding:100px 16px 24px}.hero-top{display:block}.hero-intro{margin-bottom:45px}.hero h1{font-size:22vw}.section{padding:80px 16px}.work-grid{display:block}.card{min-height:330px;margin-bottom:12px}.about{grid-template-columns:1fr}.services{grid-template-columns:1fr}.service:nth-child(odd){padding-right:0}.float-note{right:5%;top:47%;width:90px;height:90px;font-size:12px}.footer{padding:14px 16px;font-size:10px}.footer span:last-child{display:none}
+}
+</style>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
+<div class="cursor"></div>
 
-  <!-- NAV -->
-  <header class="nav">
-    <a class="brand" href="#top">nomitdzns</a>
-    <nav aria-label="Main">
-      <a href="#about">About</a>
-      <a href="#work">Portfolio</a>
-      <a href="#pricing">Pricing</a>
-      <a class="btn btn-small" href="#contact">Book a Call</a>
-    </nav>
-  </header>
+<header>
+  <a href="#" class="mono">NOMIT®</a>
+  <nav class="mono">
+    <a class="navlink" href="#work">Work</a>
+    <a class="navlink" href="#about">About</a>
+    <a class="navlink" href="#contact">Contact</a>
+  </nav>
+</header>
 
-  <main id="main">
+<main>
+<section class="hero">
+  <div class="hero-top">
+    <div class="hero-intro mono reveal">Creative Director / Designer / Founder<br>Delhi NCR, India<br><br>Making brands, visuals, websites & things that shouldn't be boring.</div>
+    <div class="mono reveal">20 — 2026</div>
+  </div>
+  <div>
+    <h1 class="reveal"><span>NOMIT</span><span class="outline">MAKES</span><span>STUFF.</span></h1>
+    <div class="hero-meta mono"><span>Scroll ↓</span><span>Graphic / Fashion / Digital / Film</span></div>
+  </div>
+  <div class="float-note">YES,<br>I MADE<br>THIS TOO.</div>
+</section>
 
-    <!-- HERO -->
-    <section class="hero" id="top">
-      <div class="hero-copy">
-        <h1>Your content deserves thumbnails that demand attention</h1>
-        <div class="cta-row">
-          <a class="btn" href="#contact">Book a Free Call</a>
-          <a class="btn btn-ghost" href="#work">See My Work</a>
-        </div>
-      </div>
-      <figure class="thumb-frame">
-        <img src="https://framerusercontent.com/images/dXBUuOpIT22QEUBAkNhGiN8KlD4.jpg?width=1200" alt="Nomit Dzns" width="1200" height="1035" loading="eager">
-        <span class="badge-time">12:48</span>
-        <span class="progress" aria-hidden="true"></span>
-      </figure>
-    </section>
+<div class="marquee"><div class="marquee-track">DESIGN — DIRECT — EDIT — BUILD — REPEAT — HVTO — DESIGN — DIRECT — EDIT — BUILD — REPEAT — HVTO — </div></div>
 
-    <!-- ABOUT -->
-    <section class="section about" id="about">
-      <h2>Nomit Dzns</h2>
-      <p class="lead">Every design is data-driven, custom, and genuinely crafted for higher engagement.</p>
-    </section>
+<section id="work" class="section">
+  <div class="section-head mono"><span>01 / Selected work</span><span>Things I've made</span></div>
+  <div class="statement reveal">A mix of <em>graphic design</em>, fashion, digital experiences, video and whatever else the idea needs.</div>
+  <div class="work-grid" style="margin-top:60px">
+    <a class="card reveal" href="#hvto"><div class="visual v1">HVTO</div><div class="card-label mono"><span>HVTO STUDIOS</span><span>01 ↗</span></div></a>
+    <a class="card reveal" href="#web"><div class="visual v2">WEB</div><div class="card-label mono"><span>WEB DESIGN</span><span>02 ↗</span></div></a>
+    <a class="card reveal"><div class="visual v3">ART<br>DIR.</div><div class="card-label mono"><span>ART DIRECTION</span><span>03 ↗</span></div></a>
+    <a class="card reveal"><div class="visual v4">POST<br>ERS</div><div class="card-label mono"><span>GRAPHIC DESIGN</span><span>04 ↗</span></div></a>
+    <a class="card reveal"><div class="visual v5">EDIT</div><div class="card-label mono"><span>VIDEO / EDITING</span><span>05 ↗</span></div></a>
+    <a class="card reveal"><div class="visual v6">BRAND</div><div class="card-label mono"><span>BRANDING</span><span>06 ↗</span></div></a>
+  </div>
+</section>
 
-    <!-- PORTFOLIO (copy an <article> to add a project) -->
-    <section class="section" id="work">
-      <h2>Recent YouTube thumbnail projects crafted to maximize clicks, tailored to each creator’s audience.</h2>
-      <div class="grid">
-        <article class="card">
-          <img src="https://framerusercontent.com/images/YOCDELprPg781PMrW8vFVOogjiI.jpg?scale-down-to=1024" alt="Fitness channel thumbnails" width="1024" height="579" loading="lazy">
-          <h3>Fitness Channel Thumbnails</h3>
-          <p>June 2025</p>
-        </article>
-        <article class="card">
-          <img src="https://framerusercontent.com/images/dd54mWB5QzMdt1x3n4mFR3LFDU.jpg?scale-down-to=1024" alt="Gaming series collab thumbnails" width="1024" height="579" loading="lazy">
-          <h3>Gaming Series Collab</h3>
-          <p>May 2025</p>
-        </article>
-        <article class="card">
-          <img src="https://framerusercontent.com/images/k5C3WU3PAUDL1RPd8cgGH6QHxbo.jpg?scale-down-to=1024" alt="Podcast promo thumbnails" width="1024" height="579" loading="lazy">
-          <h3>Podcast Promo Thumbnails</h3>
-          <p>July 2025</p>
-        </article>
-        <article class="card">
-          <img src="https://framerusercontent.com/images/3m2bcNbnlZLWdhiM4WqkdxpJgI.jpg?scale-down-to=1024" alt="Movie review launch thumbnails" width="1024" height="579" loading="lazy">
-          <h3>Movie Review Launch</h3>
-          <p>May 2025</p>
-        </article>
-      </div>
-    </section>
+<section id="about" class="section">
+  <div class="section-head mono"><span>02 / About</span><span>Nomit, 20, India</span></div>
+  <div class="about">
+    <div class="mono reveal">Designer → Creative Director → Founder</div>
+    <div class="about-copy reveal">I started with <b>graphic design</b>, then realised I liked being involved in the whole thing — the idea, the visuals, the video, the website, the brand and the tiny details nobody notices.<br><br>So I built my own playground: <b>HVTO Studios.</b></div>
+  </div>
+</section>
 
-    <!-- PRICING -->
-    <section class="section" id="pricing">
-      <h2>Packages &amp; Pricing</h2>
-      <p class="lead">Pick your perfect fit.</p>
-      <div class="plans">
-        <article class="plan">
-          <h3>Starter</h3>
-          <p class="price">$49</p>
-          <ul>
-            <li>3 thumbnails</li>
-            <li>48h delivery</li>
-            <li>1 round of revision</li>
-          </ul>
-          <a class="btn btn-ghost" href="#contact" data-plan="Starter ($49)">Start Now</a>
-        </article>
-        <article class="plan plan-featured">
-          <h3>Pro</h3>
-          <p class="price">$199</p>
-          <ul>
-            <li>10 thumbnails</li>
-            <li>72h delivery</li>
-            <li>Unlimited revisions</li>
-          </ul>
-          <a class="btn" href="#contact" data-plan="Pro ($199)">Book This Package</a>
-        </article>
-        <article class="plan">
-          <h3>Custom</h3>
-          <p class="price">Let’s Talk</p>
-          <ul>
-            <li>Bespoke solutions</li>
-            <li>Flexible turnaround</li>
-            <li>Strategy call included</li>
-          </ul>
-          <a class="btn btn-ghost" href="#contact" data-plan="Custom">Book a Free Call</a>
-        </article>
-      </div>
-    </section>
+<section class="section">
+  <div class="section-head mono"><span>03 / Capabilities</span><span>Jack of some trades</span></div>
+  <div class="services">
+    <div class="service reveal"><span>01 — Creative Direction</span><span>↗</span></div>
+    <div class="service reveal"><span>02 — Graphic Design</span><span>↗</span></div>
+    <div class="service reveal"><span>03 — Art Direction</span><span>↗</span></div>
+    <div class="service reveal"><span>04 — Brand Identity</span><span>↗</span></div>
+    <div class="service reveal"><span>05 — Fashion / Product</span><span>↗</span></div>
+    <div class="service reveal"><span>06 — Video / Editing</span><span>↗</span></div>
+    <div class="service reveal"><span>07 — Web Design</span><span>↗</span></div>
+    <div class="service reveal"><span>08 — Web Development</span><span>↗</span></div>
+  </div>
+</section>
 
-    <!-- FAQ -->
-    <section class="section faq" id="faq">
-      <h2>Questions</h2>
-      <details>
-        <summary>How fast can I get my thumbnails?</summary>
-        <p>Most orders are delivered within 48–72 hours, depending on the package.</p>
-      </details>
-      <details>
-        <summary>How are revisions handled?</summary>
-        <p>Starter includes 1 revision, Pro offers unlimited tweaks for a week.</p>
-      </details>
-      <details>
-        <summary>What makes nomitdzns different?</summary>
-        <p>Every design is data-driven, custom, and genuinely crafted for higher engagement.</p>
-      </details>
-    </section>
+<section id="hvto" class="section hvto">
+  <div class="section-head mono"><span>04 / Founder mode</span><span>HVTO Studios</span></div>
+  <div class="hvto-mark reveal">HVTO®</div>
+  <div class="statement reveal">I didn't just design a clothing brand. I built the <em>whole world</em> around it.</div>
+  <p class="mono reveal" style="max-width:620px;line-height:1.7;margin-top:40px">Creative direction, clothing concepts, graphics, campaign visuals, product direction, content, editing, website and the questionable decisions in between — all directed and made by Nomit.</p>
+</section>
 
-    <!-- CONTACT (email address is set in script.js) -->
-    <section class="section contact" id="contact">
-      <h2>Let’s build your channel’s next hit</h2>
-      <p class="lead">Book a free call.</p>
-      <form id="contact-form" novalidate autocomplete="on">
-        <label>Name
-          <input type="text" name="name" maxlength="80" required autocomplete="name">
-        </label>
-        <label>Email
-          <input type="email" name="email" maxlength="120" required autocomplete="email">
-        </label>
-        <label>Message
-          <textarea name="message" rows="5" maxlength="1500" required></textarea>
-        </label>
-        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button class="btn" type="submit">Send message</button>
-        <p id="form-status" role="status" aria-live="polite"></p>
-      </form>
-    </section>
-  </main>
+<section id="web" class="section">
+  <div class="section-head mono"><span>05 / Digital</span><span>Websites I've made</span></div>
+  <div class="statement reveal">I also make <em>websites.</em> Not just pretty screens — interactive experiences that actually work.</div>
+  <div style="margin-top:60px;border-top:1px solid var(--ink)">
+    <div class="service reveal"><span>01 — Brand / Portfolio websites</span><span>↗</span></div>
+    <div class="service reveal"><span>02 — E-commerce / Shopify</span><span>↗</span></div>
+    <div class="service reveal"><span>03 — Landing pages</span><span>↗</span></div>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>© 2024–2025 nomitdzns. All Rights Reserved.</p>
-    <nav aria-label="Social">
-      <a href="https://www.instagram.com/nomitdzns/" target="_blank" rel="noopener noreferrer">Instagram</a>
-      <a href="https://x.com/boutnomit" target="_blank" rel="noopener noreferrer">X</a>
-      <a href="https://www.linkedin.com/in/nomit-bhadoriya/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    </nav>
-  </footer>
+<section id="contact" class="section contact">
+  <div class="section-head mono"><span>06 / Contact</span><span>Let's make something weird.</span></div>
+  <h2 class="reveal">HAVE<br><span>AN IDEA?</span></h2>
+  <div class="mono" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <a href="mailto:hello@nomit.design">hello@nomit.design ↗</a>
+    <a href="https://www.instagram.com/nomitdzns/" target="_blank">@nomitdzns ↗</a>
+    <span>Delhi NCR / India</span>
+  </div>
+</section>
+</main>
 
-  <script src="script.js" defer></script>
+<footer class="footer mono"><span>© 2026 NOMIT</span><span>MADE WITH TOO MUCH CAFFEINE</span></footer>
+
+<script>
+const cursor=document.querySelector('.cursor');
+window.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
+document.querySelectorAll('a,.card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='42px';cursor.style.height='42px'});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='18px';cursor.style.height='18px'});
+});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
 </html>
-
