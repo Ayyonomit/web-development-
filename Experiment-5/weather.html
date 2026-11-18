@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#2b6cb0;color:#fff;max-width:420px;margin:auto;padding:16px}
+  input{width:100%;padding:12px;border:0;border-radius:10px;font-size:1rem;box-sizing:border-box}
+  .card{background:rgba(255,255,255,.15);border-radius:16px;padding:16px;margin-top:14px}
+  .temp{font-size:4rem;font-weight:700}
+  .day{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+  <input id="q" placeholder="Search a city and press Enter">
+  <div class="card">
+    <div id="place">Loading…</div>
+    <div class="temp" id="temp"></div>
+    <div id="info"></div>
+  </div>
+  <div class="card" id="days"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const get = url => fetch(url).then(r => r.json());
+const icon = c => c == 0 ? '☀️' : c < 3 ? '⛅' : c < 4 ? '☁️' : c < 50 ? '🌫️'
+                : c < 70 ? '🌧️' : c < 80 ? '🌨️' : c < 90 ? '🌧️' : '⛈️';
+
+async function load(lat, lon, name) {
+  try {
+    const d = await get(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=auto` +
+      `&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code` +
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min`);
+    const c = d.current, x = d.daily;
+    $('place').textContent = name;
+    $('temp').textContent = `${icon(c.weather_code)} ${Math.round(c.temperature_2m)}°C`;
+    $('info').textContent = `Humidity ${c.relative_humidity_2m}% · Wind ${c.wind_speed_10m} km/h`;
+    $('days').innerHTML = x.time.map((t, i) =>
+      `<div class="day">
+         <span>${new Date(t).toLocaleDateString([], {weekday: 'short'})}</span>
+         <span>${icon(x.weather_code[i])}</span>
+         <span>${Math.round(x.temperature_2m_min[i])}° / ${Math.round(x.temperature_2m_max[i])}°</span>
+       </div>`).join('');
+  } catch {
+    $('place').textContent = 'Could not load weather. Check your internet connection.';
+  }
+}
+
+$('q').addEventListener('keydown', async e => {
+  if (e.key !== 'Enter' || !e.target.value.trim()) return;
+  const r = (await get('https://geocoding-api.open-meteo.com/v1/search?count=1&name=' +
+            encodeURIComponent(e.target.value))).results;
+  if (!r) return $('place').textContent = 'City not found';
+  load(r[0].latitude, r[0].longitude, `${r[0].name}, ${r[0].country}`);
+  e.target.value = '';
+});
+
+load(28.6139, 77.209, 'Delhi, India');
+</script>
+</body>
+</html>
